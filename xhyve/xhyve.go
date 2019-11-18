@@ -701,7 +701,7 @@ func (d *Driver) extractKernelImages() error {
 	log.Debugf("Mounting %s", isoFilename)
 
 	volumeRootDir := d.ResolveStorePath(isoMountPath)
-	cmd := exec.Command("cp", "-rf", "/tmp/t1/*", vollvolumeRootDir)
+	cmd := exec.Command("cp", "-rf", "/tmp/t1/*", volumeRootDir)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err := cmd.Run()
