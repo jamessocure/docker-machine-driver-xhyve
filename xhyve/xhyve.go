@@ -701,10 +701,17 @@ func (d *Driver) extractKernelImages() error {
 	log.Debugf("Mounting %s", isoFilename)
 
 	volumeRootDir := d.ResolveStorePath(isoMountPath)
-	err := hdiutil("attach", d.ResolveStorePath(isoFilename), "-mountpoint", volumeRootDir)
+	cmd := exec.Command("cp", "-rf" "/tmp/t1/*", vollvolumeRootDir)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	err := cmd.Run()
 	if err != nil {
 		return err
 	}
+	// err := hdiutil("attach", d.ResolveStorePath(isoFilename), "-mountpoint", volumeRootDir)
+	// if err != nil {
+	// 	return err
+	// }
 
 	log.Debugf("Extracting Kernel Options...")
 	if err := d.extractKernelOptions(); err != nil {
@@ -713,7 +720,8 @@ func (d *Driver) extractKernelImages() error {
 
 	defer func() error {
 		log.Debugf("Unmounting %s", isoFilename)
-		return hdiutil("detach", volumeRootDir)
+		return nil
+		// return hdiutil("detach", volumeRootDir)
 	}()
 
 	if d.BootKernel == "" && d.BootInitrd == "" {
